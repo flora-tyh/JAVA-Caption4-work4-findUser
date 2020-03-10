@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Person {
@@ -25,7 +26,13 @@ public class Person {
 
   public Optional<SimpleAddress> getSimpleAddress() {
     //TODO: return Optional<SimpleAddress>
-    return null;
+    SimpleAddress sa = null;
+    Address address = Optional.ofNullable(getAddress()).orElse(new Address(null, null, null, null));
+    if (address.getCity() != null && address.getStreet() != null) {
+      sa = new SimpleAddress(address.getStreet(), address.getCity());
+    }
+    Optional<SimpleAddress> simpleAddress = Optional.ofNullable(sa);
+    return simpleAddress;
   }
 
   public Address getAddress() {
@@ -38,5 +45,47 @@ public class Person {
 
   public List<Telephone> getTelephones() {
     return telephones;
+  }
+
+  public void setMasterNumber(String masterNumber) {
+    this.masterNumber = masterNumber;
+  }
+
+  public void setAddress(Address address) {
+    this.address = address;
+  }
+
+  public void setTelephones(List<Telephone> telephones) {
+    this.telephones = telephones;
+  }
+
+  public void setEmails(List<Email> emails) {
+    this.emails = emails;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Person)) return false;
+    Person person = (Person) o;
+    return Objects.equals(masterNumber, person.masterNumber) &&
+            Objects.equals(address, person.address) &&
+            Objects.equals(telephones, person.telephones) &&
+            Objects.equals(emails, person.emails);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(masterNumber, address, telephones, emails);
+  }
+
+  @Override
+  public String toString() {
+    return "Person{" +
+            "masterNumber='" + masterNumber + '\'' +
+            ", address=" + address +
+            ", telephones=" + telephones +
+            ", emails=" + emails +
+            '}';
   }
 }
