@@ -20,8 +20,8 @@ public class PersonService {
     //TODO: Add the code to return people by numbers
     // Use groupToPeople() method
     List<String> numbersList = numbers.stream().map(MasterNumber::getNumber).collect(Collectors.toList());
-    Optional<PersonSet> personSet = Optional.ofNullable(people.get(numbersList)).orElse(Optional.of(new PersonSet(null, null, null, null)));
-    Stream<Person> person = personSet.get().groupToPeople();
+    Stream<Person> person = people.getOrDefault(numbersList, Optional.empty())
+                                  .map(PersonSet :: groupToPeople).orElse(Stream.empty());
     return person;
   }
 }
